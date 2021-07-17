@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Calculation service
+  description: Contains operations for calculating various kinds of values.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:8080
+    description: Local server (development)
+
+paths:
+  /actions/doubling:
+    get:
+      summary: Calculating a double number of the specified number.
+      parameters:
+        - in: query
+          name: num
+          schema:
+            type: number
+            format: float
+            example: 1.5
+          description: |
+            The number to be doubled.  
+            The decimal separator is the **dot**.
+      responses:
+        200:
+          description: successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: number
+                    format: float
+                    example: 3
+        400:
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                num is empty:
+                  value:
+                    error: "parameter 'num' is required"
+                num is string:
+                  value:
+                    error: "parameter 'num' must be a number"
+
+components:
+  schemas:
+    ErrorResponse:
+      properties:
+        error:
+          type: string
+          example: error description
